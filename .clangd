@@ -1,0 +1,2 @@
+CompileFlags:
+    Add: [--target=avr, -mmcu=atmega1284, -I/usr/local/Cellar/avr-gcc@9/9.4.0_1/avr/include]
