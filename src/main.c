@@ -2,8 +2,6 @@
 #include <avr/io.h>
 
 volatile uint8_t g_timer_flag = 0;
-const uint16_t g_avr_timer_start = 1;
-volatile uint16_t g_avr_timer_current_value = 0;
 
 void timer_init() {
   // settings clear timer on compare (CTC)
@@ -22,19 +20,12 @@ void timer_init() {
 
   // enable interrupts globally
   SREG |= 1 << SREG_I;
-
-  // init our timer val
-  g_avr_timer_current_value = g_avr_timer_start;
 }
 
 void timer_reset() { TCCR1B = 0; }
 
 ISR(timer_interrupt_compare_vector) {
-  --g_avr_timer_current_value;
-  if (g_avr_timer_current_value == 0) {
     g_timer_flag = 1;
-    g_avr_timer_current_value = g_avr_timer_start;
-  }
 }
 
 int main(void) {
