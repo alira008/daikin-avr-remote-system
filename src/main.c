@@ -2,15 +2,13 @@
 #include <avr/io.h>
 
 int main(void) {
-  timer_init();
+  timer1_init();
 
   PORTB |= (1 << PB1);
   while (1) {
-    while (!g_timer_flag)
+    while (!g_timer1_flag)
       ;
-    g_timer_flag = 0;
+    g_timer1_flag = 0;
   }
-
-  timer_reset();
   return 1;
 }
