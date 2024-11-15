@@ -6,7 +6,7 @@ I will have a web interface that interacts with a system of 3 ATMega1284 microco
 
 placed in front of the ACs.
 
-### Reference help
+## Reference help
 
 - Someone reverse engineered the [Daikin remote protocol](https://github.com/blafois/Daikin-IR-Reverse). 
 This helped me figure how to form the payload I need to send to the Daikin AC.
