@@ -27,6 +27,6 @@ void timer_init() {
 
 inline void timer_reset() { TCCR1B = 0; }
 
-ISR(inline timer_interrupt_compare_vector) { g_timer_flag = 1; }
+ISR(TIMER1_COMPA_vect) { g_timer_flag = 1; }
 
 #endif // !__TIMER_H__
