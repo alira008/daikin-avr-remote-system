@@ -10,21 +10,21 @@
 #define LOW_ZERO_STATE_DURATION 420 // 420us
 
 typedef enum DaikinMode {
-  DaikinModeAuto,
-  DaikinModeDry,
-  DaikinModeCold,
-  DaikinModeHeat,
-  DaikinModeFan
+  DaikinModeAuto = 0,
+  DaikinModeDry = 2,
+  DaikinModeCold = 3,
+  DaikinModeHeat = 4,
+  DaikinModeFan = 6
 } DaikinMode;
 
 typedef enum DaikinFanSpeed {
-  DaikinFanSpeedOne,
-  DaikinFanSpeedTwo,
-  DaikinFanSpeedThree,
-  DaikinFanSpeedFour,
-  DaikinFanSpeedFive,
-  DaikinFanSpeedAuto,
-  DaikinFanSpeedSilent
+  DaikinFanSpeedOne = 0x03,
+  DaikinFanSpeedTwo = 0x04,
+  DaikinFanSpeedThree = 0x05,
+  DaikinFanSpeedFour = 0x06,
+  DaikinFanSpeedFive = 0x07,
+  DaikinFanSpeedAuto = 0x0A,
+  DaikinFanSpeedSilent = 0x0B
 } DaikinFanSpeed;
 
 typedef struct {
@@ -35,10 +35,25 @@ typedef struct {
   uint16_t timer_delay;
   bool power_state;
   DaikinFanSpeed fan_speed;
-  bool swing_state;
+  bool vertical_swing_state;
+  bool horizontal_swing_state;
   bool powerful_state;
   bool economy_state;
+  bool eco_sensing_state;
   bool comfort_state;
 } DaikinState;
+
+#define MAX_FRAME_SIZE 0x12
+typedef struct {
+  uint8_t buf[MAX_FRAME_SIZE];
+  uint8_t frame_size;
+} Frame;
+
+#define MAX_MESSAGE_FRAMES_SIZE 3
+typedef struct {
+  Frame frames[MAX_MESSAGE_FRAMES_SIZE];
+} Message;
+
+const Message *const daikin_get_current_message();
 
 #endif // !__DAIKIN_H__
