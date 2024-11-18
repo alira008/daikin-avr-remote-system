@@ -1,5 +1,6 @@
 #include "daikin.h"
 #include <avr/io.h>
+#include <avr/sfr_defs.h>
 
 // frame helpers
 #define INITIATE_FRAME_BUF_HEADER(frame)                                       \
