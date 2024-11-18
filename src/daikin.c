@@ -1,16 +1,7 @@
 #include "daikin.h"
 #include <avr/io.h>
 
-#define MAX_MESSAGES_SIZE 3
-uint8_t g_current_message_index = 0;
-Message g_messages[MAX_MESSAGES_SIZE] = {0};
-
-const Message *const daikin_get_current_message() {
-  return &g_messages[g_current_message_index];
-}
-
-Message convert_daikin_state_to_message(DaikinState daikin_state) {}
-
+// frame helpers
 #define INITIATE_FRAME_BUF_HEADER(frame)                                       \
   do {                                                                         \
     frame[0] = 0x11;                                                           \
@@ -33,8 +24,29 @@ Message convert_daikin_state_to_message(DaikinState daikin_state) {}
 #define TIMER_DELAY_OFF_OFFSET_2 0x0C
 #define POWERFUL_STATE_OFFSET 0x0D
 #define ECONOMY_STATE_ECO_SENSING_STATE_OFFSET 0x10
+// end frame helpers
 
+// globals
+#define MAX_MESSAGES_SIZE 3
+uint8_t g_current_message_index = 0;
+Message g_messages[MAX_MESSAGES_SIZE] = {0};
+// end globals
+
+Frame create_frame_1(bool comfort_state);
+Frame create_frame_2();
+Frame create_frame_3(DaikinState daikin_state);
 uint8_t calculate_checksum(uint8_t *buf, uint8_t size);
+
+const Message *const daikin_get_current_message() {
+  return &g_messages[g_current_message_index];
+}
+
+Message convert_daikin_state_to_message(DaikinState daikin_state) {
+  Frame frame_1 = create_frame_1(daikin_state.comfort_state);
+  Frame frame_2 = create_frame_2();
+  Frame frame_3 = create_frame_3(daikin_state);
+  return (Message){.frames = {frame_1, frame_2, frame_3}};
+}
 
 Frame create_frame_1(bool comfort_state) {
   Frame frame = {.frame_size = 8};
@@ -48,7 +60,7 @@ Frame create_frame_1(bool comfort_state) {
 }
 
 // this frame does not change
-Frame create_frame_2(bool comfort_state) {
+Frame create_frame_2() {
   Frame frame = {.frame_size = 8};
   INITIATE_FRAME_BUF_HEADER(frame.buf);
   // code is 0x42
@@ -59,7 +71,7 @@ Frame create_frame_2(bool comfort_state) {
 }
 
 Frame create_frame_3(DaikinState daikin_state) {
-  Frame frame = {.frame_size = 8};
+  Frame frame = {.frame_size = MAX_FRAME_SIZE};
   INITIATE_FRAME_BUF_HEADER(frame.buf);
   // code is 0x00
   frame.buf[MODE_ON_OFF_TIMER_OFFSET] = (daikin_state.mode << 4);
@@ -112,7 +124,7 @@ Frame create_frame_3(DaikinState daikin_state) {
   if (daikin_state.eco_sensing_state) {
     frame.buf[POWERFUL_STATE_OFFSET] |= 0x82;
   }
-  frame.buf[7] = calculate_checksum(frame.buf, frame.frame_size - 1);
+  frame.buf[0x12] = calculate_checksum(frame.buf, frame.frame_size - 1);
 
   return frame;
 }

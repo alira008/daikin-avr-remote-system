@@ -43,7 +43,7 @@ typedef struct {
   bool comfort_state;
 } DaikinState;
 
-#define MAX_FRAME_SIZE 0x12
+#define MAX_FRAME_SIZE 0x13
 typedef struct {
   uint8_t buf[MAX_FRAME_SIZE];
   uint8_t frame_size;
