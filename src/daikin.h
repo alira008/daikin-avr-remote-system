@@ -9,15 +9,15 @@
 #define LOW_ONE_STATE_DURATION 1286 // 1286us
 #define LOW_ZERO_STATE_DURATION 420 // 420us
 
-enum DaikinMode {
+typedef enum DaikinMode {
   DaikinModeAuto,
   DaikinModeDry,
   DaikinModeCold,
   DaikinModeHeat,
   DaikinModeFan
-};
+} DaikinMode;
 
-enum DaikinFanSpeed {
+typedef enum DaikinFanSpeed {
   DaikinFanSpeedOne,
   DaikinFanSpeedTwo,
   DaikinFanSpeedThree,
@@ -25,7 +25,7 @@ enum DaikinFanSpeed {
   DaikinFanSpeedFive,
   DaikinFanSpeedAuto,
   DaikinFanSpeedSilent
-};
+} DaikinFanSpeed;
 
 typedef struct {
   uint8_t temperature;
