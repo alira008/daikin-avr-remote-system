@@ -42,6 +42,14 @@ const Message *const daikin_get_current_message() {
   return &g_messages[g_current_message_index];
 }
 
+void daikin_ack_current_message() {
+  if (g_current_message_index + 1 >= MAX_MESSAGES_SIZE) {
+    g_current_message_index = 0;
+  } else {
+    g_current_message_index++;
+  }
+}
+
 Message convert_daikin_state_to_message(DaikinState daikin_state) {
   Frame frame_1 = create_frame_1(daikin_state.comfort_state);
   Frame frame_2 = create_frame_2();

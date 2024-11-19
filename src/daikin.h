@@ -56,5 +56,6 @@ typedef struct {
 } Message;
 
 const Message *const daikin_get_current_message();
+void daikin_ack_current_message();
 
 #endif // !__DAIKIN_H__
