@@ -25,12 +25,4 @@ static inline void timer3_init() {
   SREG |= _BV(SREG_I);
 }
 
-// will be used for transmitting ir signals
-ISR(TIMER3_COMPA_vect) {
-  const Message *const message = daikin_get_current_message();
-  if (!message->should_send) {
-    return;
-  }
-}
-
 #endif // !__TIMER_H__
