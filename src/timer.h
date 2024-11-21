@@ -6,7 +6,8 @@
 #include <avr/io.h>
 #include <stdbool.h>
 
-volatile bool g_timer_on = false;
+// volatile bool g_timer_on = false;
+extern volatile bool g_timer_on;
 
 static inline void timer3_init() {
   if (g_timer_on)

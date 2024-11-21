@@ -1,6 +1,7 @@
 #include "timer.h"
 #include "daikin.h"
 
+volatile bool g_timer_on = false;
 volatile bool g_is_high_state = false;
 volatile uint8_t g_current_frame = 0;
 volatile uint8_t g_current_byte = 0;
