@@ -43,6 +43,7 @@ const Message *const daikin_get_current_message() {
 }
 
 void daikin_ack_current_message() {
+  g_messages[g_current_message_index].should_send = false;
   if (g_current_message_index + 1 >= MAX_MESSAGES_SIZE) {
     g_current_message_index = 0;
   } else {
