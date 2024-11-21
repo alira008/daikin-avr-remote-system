@@ -7,7 +7,7 @@ SRC_DIR=src/
 SOURCES=$(wildcard $(SRC_DIR)*.c)
 INCLUDES=-I$(AVR_INCLUDE_DIR)
 OBJ_DIR=$(BUILD_DIR)obj/
-OBJS=$(patsubst $(SRC_DIR)%,$(OBJ_DIR)%,$(SOURCES:.c=.o))
+OBJS=$(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SOURCES))
 
 AVR=avr-gcc
 AVR_PROGRAMMER=avrdude
@@ -26,7 +26,7 @@ $(BUILD_DIR)main.hex: $(OBJ_DIR)main.elf
 	@$(OBJCOPY) $(OBJFLAGS) $< $@
 
 $(OBJ_DIR)main.elf: $(OBJS)
-	@$(AVR) $(FLAGS) $(INCLUDES) -o $@ $<
+	@$(AVR) $(FLAGS) $(INCLUDES) -o $@ $(OBJS)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 	@$(AVR) $(FLAGS) $(INCLUDES) -c -o $@ $<
