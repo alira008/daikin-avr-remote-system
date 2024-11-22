@@ -28,8 +28,14 @@ $(BUILD_DIR)main.hex: $(OBJ_DIR)main.elf
 $(OBJ_DIR)main.elf: $(OBJS)
 	@$(AVR) $(FLAGS) $(INCLUDES) -o $@ $(OBJS)
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c $(OBJ_DIR)
 	@$(AVR) $(FLAGS) $(INCLUDES) -c -o $@ $<
+
+$(OBJ_DIR): $(BUILD_DIR)
+	@mkdir build/obj
+
+$(BUILD_DIR):
+	@mkdir build
 
 clean:
 	rm -r build
