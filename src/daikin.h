@@ -55,6 +55,7 @@ typedef struct {
 } Message;
 
 bool daikin_get_current_message(Message *const message);
+bool daikin_enqueue_daikin_state(DaikinState daikin_state);
 void daikin_ack_current_message();
 
 #endif // !__DAIKIN_H__

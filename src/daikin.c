@@ -76,6 +76,7 @@ bool messages_queue_enqueue(MessagesQueue *q, Message message) {
   return true;
 }
 
+Message convert_daikin_state_to_message(DaikinState daikin_state);
 Frame create_frame_1(bool comfort_state);
 Frame create_frame_2();
 Frame create_frame_3(DaikinState daikin_state);
@@ -83,6 +84,11 @@ uint8_t calculate_checksum(uint8_t *buf, uint8_t size);
 
 bool daikin_get_current_message(Message *const message) {
   return messages_queue_peek(&g_messages_queue, message);
+}
+
+bool daikin_enqueue_daikin_state(DaikinState daikin_state) {
+  Message message = convert_daikin_state_to_message(daikin_state);
+  return messages_queue_enqueue(&g_messages_queue, message);
 }
 
 void daikin_ack_current_message() {
