@@ -52,10 +52,9 @@ typedef struct {
 #define MAX_MESSAGE_FRAMES_SIZE 3
 typedef struct {
   Frame frames[MAX_MESSAGE_FRAMES_SIZE];
-  bool should_send;
 } Message;
 
-const Message *const daikin_get_current_message();
+bool daikin_get_current_message(Message *const message);
 void daikin_ack_current_message();
 
 #endif // !__DAIKIN_H__

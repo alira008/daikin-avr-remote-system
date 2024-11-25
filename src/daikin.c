@@ -31,24 +31,63 @@
 #define MAX_MESSAGES_SIZE 3
 uint8_t g_current_message_index = 0;
 Message g_messages[MAX_MESSAGES_SIZE] = {0};
+
+typedef struct {
+  Message data[MAX_MESSAGES_SIZE];
+  uint8_t front;
+  uint8_t rear;
+  uint8_t size;
+} MessagesQueue;
+
+MessagesQueue g_messages_queue = {0};
 // end globals
+
+bool messages_queue_is_empty(MessagesQueue *q) { return q->size == 0; }
+
+bool messages_queue_is_full(MessagesQueue *q) {
+  return q->size == MAX_MESSAGES_SIZE;
+}
+
+bool messages_queue_dequeue(MessagesQueue *q, Message *message) {
+  if (messages_queue_is_empty(q)) {
+    return false;
+  }
+  *message = q->data[q->front];
+  q->front = (q->front + 1) % MAX_MESSAGES_SIZE;
+  q->size--;
+  return true;
+}
+
+bool messages_queue_peek(MessagesQueue *q, Message *const message) {
+  if (messages_queue_is_empty(q)) {
+    return false;
+  }
+  *message = q->data[q->front];
+  return true;
+}
+
+bool messages_queue_enqueue(MessagesQueue *q, Message message) {
+  if (messages_queue_is_full(q)) {
+    return false;
+  }
+  q->data[q->rear] = message;
+  q->front = (q->rear + 1) % MAX_MESSAGES_SIZE;
+  q->size++;
+  return true;
+}
 
 Frame create_frame_1(bool comfort_state);
 Frame create_frame_2();
 Frame create_frame_3(DaikinState daikin_state);
 uint8_t calculate_checksum(uint8_t *buf, uint8_t size);
 
-const Message *const daikin_get_current_message() {
-  return &g_messages[g_current_message_index];
+bool daikin_get_current_message(Message *const message) {
+  return messages_queue_peek(&g_messages_queue, message);
 }
 
 void daikin_ack_current_message() {
-  g_messages[g_current_message_index].should_send = false;
-  if (g_current_message_index + 1 >= MAX_MESSAGES_SIZE) {
-    g_current_message_index = 0;
-  } else {
-    g_current_message_index++;
-  }
+  Message message;
+  messages_queue_dequeue(&g_messages_queue, &message);
 }
 
 Message convert_daikin_state_to_message(DaikinState daikin_state) {
