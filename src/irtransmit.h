@@ -1,15 +1,15 @@
-#ifndef __TIMER_H__
-#define __TIMER_H__
+#ifndef __IRTRANSMIT_H__
+#define __IRTRANSMIT_H__
 
 #include "daikin.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <stdbool.h>
 
-extern volatile bool g_timer_on;
+extern volatile bool g_ir_transmit_on;
 
-static inline void timer3_init() {
-  if (g_timer_on)
+static inline void ir_transmit_init() {
+  if (g_ir_transmit_on)
     return;
 
   // normal mode
@@ -31,10 +31,10 @@ static inline void timer3_init() {
   // enable interrupts globally
   SREG |= _BV(SREG_I);
 
-  g_timer_on = true;
+  g_ir_transmit_on = true;
 }
 
-static inline void timer3_deinit() {
+static inline void ir_transmit_deinit() {
   // normal mode
   TCCR3A = 0;
   // disable ctc mode
@@ -52,7 +52,7 @@ static inline void timer3_deinit() {
   // disable interrupts globally
   SREG &= ~(1 << SREG_I);
 
-  g_timer_on = false;
+  g_ir_transmit_on = false;
 }
 
-#endif // !__TIMER_H__
+#endif // !__IRTRANSMIT_H__

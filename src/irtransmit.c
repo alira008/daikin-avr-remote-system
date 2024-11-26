@@ -1,5 +1,4 @@
-#include "timer.h"
-#include "daikin.h"
+#include "irtransmit.h"
 
 volatile bool g_timer_on = false;
 volatile bool g_is_high_state = false;
@@ -42,7 +41,7 @@ ISR(TIMER3_COMPA_vect) {
     Message next_message;
     if (!daikin_get_current_message(&next_message)) {
       // if there are no more messages queued to send, stop timer
-      timer3_deinit();
+      ir_transmit_deinit();
     }
   }
   update_current_context(frame.frame_size);

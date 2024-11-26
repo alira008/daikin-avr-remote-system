@@ -1,4 +1,4 @@
-#include "timer.h"
+#include "irtransmit.h"
 
 int main(void) {
   timer3_init();
