@@ -5,15 +5,7 @@
 #include <avr/io.h>
 #include <stdbool.h>
 
-extern volatile bool g_ir_receive_on;
-extern volatile uint16_t g_current_frame;
-extern volatile uint16_t g_current_byte;
-extern volatile uint16_t g_current_bit;
-
 static inline void ir_receive_init() {
-  if (g_ir_receive_on)
-    return;
-
   // 8 prescalar
   // Input capture on rise edge
   TCCR1B = _BV(CS11) | _BV(ICES1);
@@ -27,11 +19,6 @@ static inline void ir_receive_init() {
 
   // enable interrupts globally
   SREG |= _BV(SREG_I);
-
-  g_ir_receive_on = true;
-  g_current_frame = 0;
-  g_current_byte = 0;
-  g_current_bit = 0;
 }
 
 static inline void ir_receive_deinit() {

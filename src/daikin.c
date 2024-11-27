@@ -91,6 +91,10 @@ bool daikin_enqueue_daikin_state(DaikinState daikin_state) {
   return messages_queue_enqueue(&g_messages_queue, message);
 }
 
+bool daikin_enqueue_message(Message message) {
+  return messages_queue_enqueue(&g_messages_queue, message);
+}
+
 void daikin_ack_current_message() {
   Message message;
   messages_queue_dequeue(&g_messages_queue, &message);
